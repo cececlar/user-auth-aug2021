@@ -1,22 +1,22 @@
-const userData = require('./seed_data/users');
-const taskData = require('./seed_data/tasks');
+const userData = require("./seed_data/users");
+const taskData = require("./seed_data/tasks");
 
 exports.seed = function (knex) {
   //DELETE all the users
-  return knex('users')
+  return knex("users")
     .del()
     .then(() => {
-      //Insert users
-      return knex('users').insert(userData);
+      //Insert users seed data
+      return knex("users").insert(userData);
     })
     .then(() => {
       //DELETE all tasks
-      return knex('tasks').del();
+      return knex("tasks").del();
     })
     .then(() => {
-      //PLUCK IDs from users
-      return knex('users')
-        .pluck('id')
+      //PLUCK IDs from users seed data
+      return knex("users")
+        .pluck("id")
         .then((userIds) => {
           return userIds;
         });
@@ -28,6 +28,6 @@ exports.seed = function (knex) {
         return task;
       });
       //INSERT the data to the tasks table
-      return knex('tasks').insert(tasksWithUserIds);
+      return knex("tasks").insert(tasksWithUserIds);
     });
 };

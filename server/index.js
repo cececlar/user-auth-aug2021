@@ -14,25 +14,6 @@ app.use(express.json());
 
 app.use("/api/users", userRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../client/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
-  });
-}
-
-let connection;
-
-if (process.env.NODE_ENV === "production") {
-  connection = mysql.createConnection(process.env.JAWSDB_URL);
-} else {
-  connection = mysql.createConnection(knex.development);
-}
-
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
-});
-
-connection.connect((err) => {
-  console.log("Connected to MySQL");
 });

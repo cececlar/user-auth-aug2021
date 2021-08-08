@@ -1,4 +1,4 @@
-### Deploying to Heroku
+### User Auth
 
 #### Fork and Configure Project
 
@@ -29,7 +29,7 @@ module.exports = {
 };
 ```
 
-- Update any configuration variables (user, password, etc) to credentials that you use to access MySQL
+- **Update any configuration variables (user, password, etc) to credentials that you use to access MySQL**
 - In Terminal, `cd server`
 - In Terminal, type `mysql -u root -p` to login as root user.
 - In the mysql console, type: `CREATE DATABASE todoheroku`
@@ -50,10 +50,10 @@ module.exports = {
 #### Prepare Your Project to Deploy to Heroku App
 
 - In Terminal, run `git remote -v` to verify that your local git repo is connected to your GitHub repo
-- To push changes to your project to Heroku, you will need a remote that points to your Heroku project, in addition to the `origin` remote. 
+- To push changes to your project to Heroku, you will need a remote that points to your Heroku project, in addition to the `origin` remote.
 - To create this new remote, in Terminal run `heroku git:remote -a <nameofyourherokuapp>`
 - Run `git remote -v` in Terminal again. **What do you see?**
-- Now, we have the ability to push changes to our Heroku project after we have pushed them up to our GitHub repo. 
+- Now, we have the ability to push changes to our Heroku project after we have pushed them up to our GitHub repo.
 - At the **root** of this project directory, run `npm init -y`. This will generate a `package.json` file at the **root** of your project.
 
 #### Update root package.json
@@ -88,9 +88,9 @@ module.exports = {
   }
 ```
 
-- Test out your npm scripts in your root and server directories to ensure they are functional. 
+- Test out your npm scripts in your root and server directories to ensure they are functional.
 
-**Check for understanding: BUT WHY???** 
+**Check for understanding: BUT WHY???**
 
 #### Configure Your Production Database, Buildpack, and Environment Variables
 
@@ -138,7 +138,6 @@ module.exports = {
     connection: process.env.JAWSDB_URL,
   },
 };
-
 ```
 
 **Check for understanding: BUT WHY???**
@@ -153,7 +152,6 @@ const knex =
 const bookshelf = require("bookshelf")(knex);
 
 module.exports = bookshelf;
-
 ```
 
 **Check for understanding: BUT WHY???**
@@ -208,20 +206,19 @@ app.listen(PORT, () => {
 connection.connect((err) => {
   console.log("Connected to MySQL");
 });
-
 ```
 
 **Check for understanding: BUT WHY???**
 
-#### Pushing to GitHub and Deploying to Heroku 
+#### Pushing to GitHub and Deploying to Heroku
 
-- `npm run dev` to verify that your project is functioning as expected locally 
+- `npm run dev` to verify that your project is functioning as expected locally
 - `git add .`
 - `git commit -m "prepare for deployment to heroku"`
 - `git push origin main` or `git push -u origin main` (the latter if it's your first time pushing to this branch)
-- `git push heroku main` to push your changes to your Heroku app 
-- `heroku logs` to view any output from pushing to Heroku 
-- **READ YOUR HEROKU LOGS IF SOMETHING HAS GONE WRONG WITH YOUR BUILD!!! ACTUALLY JUST READ YOUR HEROKU LOGS EVEN IF EVERYTHING IS SUCCESSFUL!!! THERE IS GOOD STUFF IN THERE!!!** *bangs on the table*
+- `git push heroku main` to push your changes to your Heroku app
+- `heroku logs` to view any output from pushing to Heroku
+- **READ YOUR HEROKU LOGS IF SOMETHING HAS GONE WRONG WITH YOUR BUILD!!! ACTUALLY JUST READ YOUR HEROKU LOGS EVEN IF EVERYTHING IS SUCCESSFUL!!! THERE IS GOOD STUFF IN THERE!!!** _bangs on the table_
 - Before you open your app, click on more dropdowns and click on 'Run Console' and type bash to open a bash terminal.
 - This is where you can run your migration and seed commands for your Heroku project (so far we have only migrated and seeded locally).
 - From the Heroku terminal, `cd server`

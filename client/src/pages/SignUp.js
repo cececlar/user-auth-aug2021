@@ -23,9 +23,13 @@ class SignUp extends React.Component {
       .catch((error) => alert(error));
   };
 
+  showLogin = () => {
+    this.props.history.push("/login");
+  };
+
   render() {
     return (
-      <div className="signup">
+      <div className="user-form">
         <h1>Create Account</h1>
         <form onSubmit={this.handleSubmit}>
           <label>First Name:</label>
@@ -40,7 +44,12 @@ class SignUp extends React.Component {
           <input type="text" name="address" onChange={this.handleChange} />
           <label>Phone Number:</label>
           <input type="text" name="phone" onChange={this.handleChange} />
-          <button>Sign up!</button>
+          <div className="user-form__buttons">
+            <button type="submit">Sign up</button>
+            <button type="button" onClick={this.showLogin}>
+              Log in
+            </button>
+          </div>
         </form>
       </div>
     );

@@ -7,9 +7,9 @@ function hashPassword(password) {
 
 module.exports = [
   {
-    first_name: "Leo",
-    last_name: "Policastro",
-    email: "leo@gmail.com",
+    first_name: "Cece",
+    last_name: "Claridge",
+    email: "cece@gmail.com",
     phone: "123-456-7890",
     address: "123 Main St, Coral Gables, FL",
     password: hashPassword("password"),
