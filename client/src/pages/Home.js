@@ -37,7 +37,7 @@ class Home extends React.Component {
     return (
       <div className="user-info">
         <h1>
-          Welcome Back, {this.state.currentUser?.first_name}{" "}
+          Welcome, {this.state.currentUser?.first_name}{" "}
           {this.state.currentUser?.last_name}
         </h1>
         {this.state.currentUserTasks?.map((task) => {
