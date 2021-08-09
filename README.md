@@ -34,7 +34,7 @@ module.exports = {
 - **Update any configuration variables (user, password, etc) to credentials that you use to access MySQL**
 - In Terminal, `cd server`
 - In Terminal, type `mysql -u root -p` to login as root user.
-- In the mysql console, type: `CREATE DATABASE todoheroku`
+- In the mysql console, type: `CREATE DATABASE todoapp`
 - In the mysql console, type: exit
 - In Terminal, run `knex migrate:latest`
 - In Terminal, run `knex seed:run`
