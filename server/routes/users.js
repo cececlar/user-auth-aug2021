@@ -5,8 +5,12 @@ const bcrypt = require("bcryptjs");
 const Task = require("../models/task");
 
 //CREATE new user
+// async await synax allows us to handle asynchronous operations without .then() and .catch()
+// the async keyword is used when we declare the function, to indicate that asynchronous operations will be happening within the function.
 router.post("/", async (req, res) => {
+  // The await keyword is used before the asynchronous operation inside of a function. Here we're using the bcrypt library to hash a password, which is an asynchronos operation.
   const password = await bcrypt.hash(req.body.password, 8);
+
   if (password) {
     const user = await new User({
       ...req.body,
