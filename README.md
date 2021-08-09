@@ -5,12 +5,12 @@
 - In Terminal, navigate to your Brainstation directory
 - **Fork** this repo
 - Once you have forked the above repo, `git clone <clonedrepourl>`
-- `cd protected_routes_cda`
+- `cd` into the project directory
 - `cd client && npm i`
 - `cd ..`
 - `cd server && npm i`
 - `cp .env.sample .env`
-- In your `.env` file, add a value for your JWT_SECRET env variable, choose any value.
+- In your `.env` file, add a value for your `JWT_SECRET` env variable, choose any value.
 
 #### Database Configuration, Migration, and Seeding
 
@@ -31,10 +31,11 @@ module.exports = {
 };
 ```
 
-- **Update any configuration variables (user, password, etc) to credentials that you use to access MySQL**
+**Update any configuration variables (user, password, etc) to credentials that you use to access MySQL**
+
 - In Terminal, `cd server`
 - In Terminal, type `mysql -u root -p` to login as root user.
 - In the mysql console, type: `CREATE DATABASE todoapp`
-- In the mysql console, type: exit
-- In Terminal, run `knex migrate:latest`
-- In Terminal, run `knex seed:run`
+- In the mysql console, type: `exit`
+- In Terminal, run `npm run migrate` from the `/server` directory
+- In Terminal, run `npm run seed` from the `/server` directory
