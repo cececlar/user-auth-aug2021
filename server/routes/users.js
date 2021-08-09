@@ -3,67 +3,70 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const Task = require("../models/task");
+const authorize = require("../middleware/authorize");
 
 //CREATE new user
-// async await synax allows us to handle asynchronous operations without .then() and .catch()
-// the async keyword is used when we declare the function, to indicate that asynchronous operations will be happening within the function.
-router.post("/", async (req, res) => {
-  // The await keyword is used before the asynchronous operation inside of a function. Here we're using the bcrypt library to hash a password, which is an asynchronos operation.
-  const password = await bcrypt.hash(req.body.password, 8);
 
-  if (password) {
-    const user = await new User({
-      ...req.body,
-      password,
-    }).save();
-    const token = jwt.sign(
-      { id: user.id, email: user.attributes.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "24h" }
-    );
-    console.log(token);
-    return res.status(201).json({ user, token });
-  }
-  return res.status(400).json({ message: "Please enter required information" });
+router.post("/", (req, res) => {
+  const { password } = req.body;
+  bcrypt.hash(password, 8).then((hashedPassword) => {
+    new User({ ...req.body, password: hashedPassword })
+      .save()
+      .then((user) => {
+        const token = jwt.sign(
+          { id: user.id, email: user.attributes.email },
+          process.env.JWT_SECRET,
+          { expiresIn: "24h" }
+        );
+        res.status(201).json({ user, token });
+      })
+      .catch((err) => {
+        res.status(400).send({ error: err.message });
+      });
+  });
 });
 
 //LOGIN user
 router.post("/login", async (req, res) => {
-  const user = await User.where({ email: req.body.email }).fetch();
-  const isMatch = await bcrypt.compare(
-    req.body.password,
-    user.attributes.password
-  );
-  if (!isMatch) return res.status(400).json({ error: "Invalid credentials." });
-  const token = jwt.sign(
-    { id: user.id, email: user.attributes.email },
-    process.env.JWT_SECRET,
-    { expiresIn: "24h" }
-  );
-  res.status(201).json({ user, token });
+  User.where({ email: req.body.email })
+    .fetch()
+    .then((user) => {
+      const isMatch = bcrypt.compareSync(
+        req.body.password,
+        user.attributes.password
+      );
+
+      if (!isMatch) {
+        return res.status(400).json({ error: "Invalid credentials." });
+      }
+
+      const token = jwt.sign(
+        { id: user.id, email: user.attributes.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" }
+      );
+      res.status(201).json({ user, token });
+    })
+    .catch((err) => {
+      res.status(400).json({ error: err.message });
+    });
 });
 
 //Get Current User
-router.get("/current", async (req, res) => {
-  const authHeader = req.headers.authorization;
-  // console.log(authHeader)
-
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    // console.log(token);
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log(decoded);
-
-    const user = await User.where({ email: decoded.email }).fetch();
-    console.log(user);
-
-    const currentUser = { ...user.attributes, password: null };
-    console.log(currentUser);
-
-    const tasks = await Task.where({ user_id: user.id }).fetchAll();
-    return res.json({ currentUser, tasks });
-  }
-  return res.status(403).json({ message: "Please login" });
+router.get("/current", authorize, (req, res) => {
+  User.where({ id: req.decoded.id })
+    .fetch()
+    .then((user) => {
+      const currentUser = { ...user.attributes, password: null };
+      Task.where({ user_id: currentUser.id })
+        .fetchAll()
+        .then((tasks) => {
+          res.status(200).json({ currentUser, tasks });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
 });
 
 module.exports = router;
