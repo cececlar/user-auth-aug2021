@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 class Login extends React.Component {
   state = {
@@ -11,7 +10,6 @@ class Login extends React.Component {
     this.setState({
       formData: { ...this.state.formData, [e.target.name]: e.target.value },
     });
-    console.log(this.state.formData);
   };
 
   handleSubmit = (e) => {
@@ -31,7 +29,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="user-form">
+      <div className="user-info">
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Email</label>

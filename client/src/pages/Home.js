@@ -4,6 +4,7 @@ import axios from "axios";
 class Home extends React.Component {
   state = {
     currentUser: null,
+    currentUserTasks: [],
   };
 
   componentDidMount() {
@@ -15,16 +16,36 @@ class Home extends React.Component {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => this.setState({ currentUser: res.data }));
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          currentUser: res.data.currentUser,
+          currentUserTasks: res.data.tasks,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+  logout = () => {
+    sessionStorage.removeItem("token");
+    this.props.history.push("/login");
+  };
 
   render() {
     return (
-      <div>
+      <div className="user-info">
         <h1>
-          Welcome Back {this.state.currentUser?.first_name}{" "}
+          Welcome Back, {this.state.currentUser?.first_name}{" "}
           {this.state.currentUser?.last_name}
         </h1>
+        {this.state.currentUserTasks?.map((task) => {
+          return <p key={task.id}>{task.description}</p>;
+        })}
+        <button type="button" onClick={this.logout}>
+          Log out
+        </button>
       </div>
     );
   }

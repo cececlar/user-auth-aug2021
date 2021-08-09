@@ -2,8 +2,9 @@ const router = require("express").Router();
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Task = require("../models/task");
 
-//CREATE new user async await syntax
+//CREATE new user
 router.post("/", async (req, res) => {
   const password = await bcrypt.hash(req.body.password, 8);
   if (password) {
@@ -21,7 +22,7 @@ router.post("/", async (req, res) => {
   return res.status(400).json({ message: "Please enter required information" });
 });
 
-//LOGIN user async await syntax
+//LOGIN user
 router.post("/login", async (req, res) => {
   const user = await User.where({ email: req.body.email }).fetch();
   const isMatch = await bcrypt.compare(
@@ -40,12 +41,22 @@ router.post("/login", async (req, res) => {
 //Get Current User
 router.get("/current", async (req, res) => {
   const authHeader = req.headers.authorization;
+  // console.log(authHeader)
+
   if (authHeader) {
     const token = authHeader.split(" ")[1];
+    // console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(decoded);
+
     const user = await User.where({ email: decoded.email }).fetch();
-    const current = { ...user.attributes, password: null };
-    return res.status(200).json(current);
+    console.log(user);
+
+    const currentUser = { ...user.attributes, password: null };
+    console.log(currentUser);
+
+    const tasks = await Task.where({ user_id: user.id }).fetchAll();
+    return res.json({ currentUser, tasks });
   }
   return res.status(403).json({ message: "Please login" });
 });
