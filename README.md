@@ -39,3 +39,7 @@ module.exports = {
 - In the mysql console, type: `exit`
 - In Terminal, run `npm run migrate` from the `/server` directory
 - In Terminal, run `npm run seed` from the `/server` directory
+
+#### ERD
+
+![ERD of database schema](./to-do-erd.png)
