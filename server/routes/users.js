@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
+    console.log(token);
     return res.status(201).json({ user, token });
   }
   return res.status(400).json({ message: "Please enter required information" });
@@ -60,4 +61,5 @@ router.get("/current", async (req, res) => {
   }
   return res.status(403).json({ message: "Please login" });
 });
+
 module.exports = router;
