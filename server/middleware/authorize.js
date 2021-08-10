@@ -1,5 +1,18 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-  //TODO: Create some middleware that will verify if the correct authorization headers have been send, and that they are valid.
+  if (!req.headers.authorization) {
+    return res.status(401).send("Please login.");
+  }
+
+  const authToken = req.headers.authorization.split(" ")[1];
+
+  jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Invalid auth token.");
+    }
+
+    req.decoded = decoded;
+    next();
+  });
 };
