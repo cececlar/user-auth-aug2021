@@ -10,21 +10,18 @@ class Home extends React.Component {
   componentDidMount() {
     //make axios call to backend to get currentUser info and set it to state
     const token = sessionStorage.getItem("token");
+    console.log(token);
     axios
       .get("/api/users/current", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        console.log(res.data);
         this.setState({
           currentUser: res.data.currentUser,
           currentUserTasks: res.data.tasks,
         });
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }
 
@@ -37,7 +34,7 @@ class Home extends React.Component {
     return (
       <div className="user-info">
         <h1>
-          Welcome, {this.state.currentUser?.first_name}{" "}
+          Welcome {this.state.currentUser?.first_name}{" "}
           {this.state.currentUser?.last_name}
         </h1>
         {this.state.currentUserTasks?.map((task) => {

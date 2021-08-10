@@ -17,9 +17,11 @@ class Login extends React.Component {
     axios
       .post("/api/users/login", this.state.formData)
       .then((res) => {
+        sessionStorage.setItem("token", res.data.token);
+        console.log(sessionStorage.getItem("token"));
         this.props.history.push("/");
       })
-      .catch((error) => alert(error));
+      .catch((error) => alert("Oops! Invalid login credentials."));
   };
 
   showSignUp = () => {

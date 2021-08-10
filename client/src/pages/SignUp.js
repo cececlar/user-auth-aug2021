@@ -18,9 +18,12 @@ class SignUp extends React.Component {
       .post("/api/users", this.state.formData)
       .then((res) => {
         sessionStorage.setItem("token", res.data.token);
+        console.log(sessionStorage.getItem("token"));
         this.props.history.push("/");
       })
-      .catch((error) => alert(error));
+      .catch((error) =>
+        alert("Oops! Please make sure you fill in all fields.")
+      );
   };
 
   showLogin = () => {

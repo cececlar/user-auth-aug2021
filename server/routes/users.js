@@ -10,21 +10,23 @@ const authorize = require("../middleware/authorize");
 router.post("/", (req, res) => {
   const { password } = req.body;
 
-  bcrypt.hash(password, 8).then((hashedPassword) => {
-    new User({ ...req.body, password: hashedPassword })
-      .save()
-      .then((user) => {
-        const token = jwt.sign(
-          { id: user.id, email: user.attributes.email },
-          process.env.JWT_SECRET,
-          { expiresIn: "24h" }
-        );
-        res.status(201).json({ user, token });
-      })
-      .catch((err) => {
-        res.status(400).send({ error: err.message });
-      });
-  });
+  bcrypt
+    .hash(password, 8)
+    .then((hashedPassword) => {
+      new User({ ...req.body, password: hashedPassword })
+        .save()
+        .then((user) => {
+          const token = jwt.sign(
+            { id: user.id, email: user.attributes.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "24h" }
+          );
+          res.status(201).json({ user, token });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
 });
 
 //LOGIN user
